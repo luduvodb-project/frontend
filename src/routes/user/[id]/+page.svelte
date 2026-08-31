@@ -160,7 +160,12 @@
 
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex-1">
                     <p class="text-zinc-400 text-sm">Net Worth</p>
-                    <p class="text-white text-2xl font-semibold">{profile.networth.toLocaleString()}</p>
+
+                    <p class="text-white text-2xl font-semibold flex gap-1.5">
+                        {profile.networth.toLocaleString()}
+
+                        <Icon icon="lucide:moon" width={24} class="text-white mt-1" />
+                    </p>
                 </div>
             </div>
             
