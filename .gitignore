@@ -1,0 +1,18 @@
+# deno
+node_modules
+deno.lock
+
+# output
+.wrangler
+/.svelte-kit
+/build
+
+# env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
