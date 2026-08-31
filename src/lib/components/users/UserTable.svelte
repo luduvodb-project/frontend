@@ -17,10 +17,10 @@
         <tbody>
             {#each store.sortedUsers as user}
                 <tr class="hover:bg-zinc-900 transition-colors">
-                    <td class="text-white py-3 px-4 border-t border-zinc-800">
+                    <td class="text-white text-sm py-3 px-4 border-t border-l border-zinc-800">
                         <a
                             href={`https://luduvo.com/profile/${user.id}`}
-                            class="text-white hover:underline"
+                            class="text-primary hover:underline"
                         >
                             {user.id}
                         </a>
