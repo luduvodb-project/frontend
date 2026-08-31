@@ -121,10 +121,6 @@ export function createUsersStore() {
     }
 
     function applyQuery(newQuery: string) {
-        console.log(newQuery);
-
-        if (newQuery == "") return;
-
         query = newQuery;
         currentPage = 0;
 
@@ -151,8 +147,6 @@ export function createUsersStore() {
 
     function handleQuerySubmit(e: SubmitEvent) {
         e.preventDefault();
-
-        console.log(query);
 
         applyQuery(query);
     }
