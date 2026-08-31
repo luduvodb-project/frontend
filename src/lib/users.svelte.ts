@@ -81,6 +81,34 @@ export function createUsersStore() {
         }
     }
 
+    function firstPage() {
+        if (currentPage !== 0) {
+            currentPage = 0;
+
+            fetchUsers(currentPage);
+        }
+    }
+
+    function lastPage() {
+        const last = totalPages - 1;
+
+        if (currentPage !== last) {
+            currentPage = last;
+
+            fetchUsers(currentPage);
+        }
+    }
+
+    function setPage(pageNumber: number) {
+        const target = Math.min(Math.max(pageNumber - 1, 0), totalPages - 1);
+
+        if (target !== currentPage && !Number.isNaN(target)) {
+            currentPage = target;
+
+            fetchUsers(currentPage);
+        }
+    }
+
     function applyLimit(newLimit: number) {
         if (newLimit < 1 || newLimit > 100) return;
 
@@ -104,7 +132,7 @@ export function createUsersStore() {
 
     function handleCustomLimitSubmit(e: SubmitEvent) {
         e.preventDefault();
-        
+
         applyLimit(customLimit);
     }
 
@@ -135,6 +163,9 @@ export function createUsersStore() {
         fetchUsers,
         nextPage,
         prevPage,
+        firstPage,
+        lastPage,
+        setPage,
         applyLimit,
         handlePresetChange,
         handleCustomLimitSubmit,
