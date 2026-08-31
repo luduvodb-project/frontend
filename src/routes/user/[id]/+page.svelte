@@ -122,7 +122,7 @@
                             <a
                                 href={`https://luduvo.com/profile/${profile.user_id}`}
                                 title="Go to profile"
-                                class="inline-flex items-center justify-center bg-zinc-800 hover:bg-primary transition-colors rounded-full w-7 h-7"
+                                class="inline-flex items-center justify-center bg-zinc-800 hover:bg-primary active:scale-95 transition-all rounded-full w-7 h-7"
                             >
                                 <Icon icon="lucide:external-link" width={16} class="text-white" />
                             </a>

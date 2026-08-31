@@ -20,6 +20,8 @@ export function createUsersStore() {
     let selectedPreset = $state<number | "custom">(25);
     let customLimit = $state(25);
 
+    let query = $state("");
+
     let sortColumn = $state<SortColumn>("id");
     let sortDirection = $state<"asc" | "desc">("asc");
 
@@ -48,7 +50,7 @@ export function createUsersStore() {
 
         try {
             const offset = pageIndex * limit;
-            const res = await fetch(`https://api.luduvo.com/users?offset=${offset}&limit=${limit}`);
+            const res = await fetch(`https://api.luduvo.com/users?offset=${offset}&limit=${limit}&q=${query}`);
 
             if (!res.ok) {
                 throw new Error(`Request failed: ${res.status}`);
@@ -118,6 +120,17 @@ export function createUsersStore() {
         fetchUsers(currentPage);
     }
 
+    function applyQuery(newQuery: string) {
+        console.log(newQuery);
+
+        if (newQuery == "") return;
+
+        query = newQuery;
+        currentPage = 0;
+
+        fetchUsers(currentPage);
+    }
+
     function handlePresetChange(e: Event) {
         const value = (e.target as HTMLSelectElement).value;
 
@@ -134,6 +147,14 @@ export function createUsersStore() {
         e.preventDefault();
 
         applyLimit(customLimit);
+    }
+
+    function handleQuerySubmit(e: SubmitEvent) {
+        e.preventDefault();
+
+        console.log(query);
+
+        applyQuery(query);
     }
 
     function toggleSort(column: SortColumn) {
@@ -159,6 +180,8 @@ export function createUsersStore() {
         get selectedPreset() { return selectedPreset; },
         get customLimit() { return customLimit; },
         set customLimit(v: number) { customLimit = v; },
+        get query() { return query; },
+        set query(v: string) { query = v; },
         PRESET_LIMITS,
         fetchUsers,
         nextPage,
@@ -167,8 +190,10 @@ export function createUsersStore() {
         lastPage,
         setPage,
         applyLimit,
+        applyQuery,
         handlePresetChange,
         handleCustomLimitSubmit,
+        handleQuerySubmit,
         toggleSort,
     };
 }

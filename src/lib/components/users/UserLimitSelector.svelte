@@ -2,7 +2,7 @@
     let { store } = $props();
 </script>
 
-<div class="flex items-center gap-3 mb-6">
+<div class="flex items-center gap-3 mb-3">
     <label for="limit-select" class="text-zinc-400 text-sm">Users per page:</label>
 
     <select
@@ -31,7 +31,7 @@
 
             <button
                 type="submit"
-                class="px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-white text-sm hover:bg-zinc-800 transition-colors"
+                class="px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-white text-sm hover:bg-primary hover:text-black active:scale-95 transition-all"
             >
                 Apply
             </button>
