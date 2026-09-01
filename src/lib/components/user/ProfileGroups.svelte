@@ -1,10 +1,10 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
-    import type { Place } from "$lib/places.svelte.ts";
+    import type { Group } from "$lib/groups.svelte.ts";
 
     interface Props {
-        places: Place[];
+        groups: Group[];
         loading: boolean;
         error: string | null;
         currentPage: number;
@@ -17,7 +17,7 @@
     }
 
     let {
-        places,
+        groups,
         loading,
         error,
         currentPage,
@@ -48,31 +48,18 @@
             destroy: () => observer.disconnect()
         };
     }
-
-    function accessLabel(access: string) {
-        switch (access) {
-            case "public":
-                return "Public";
-            case "private":
-                return "Private";
-            case "friends":
-                return "Friends Only";
-            default:
-                return access;
-        }
-    }
 </script>
 
 <div class="mt-8">
     <div class="flex items-center justify-between mb-4">
-        <h2 class="text-white text-xl font-medium">Games</h2>
+        <h2 class="text-white text-xl font-medium">Groups</h2>
 
         <div class="flex items-center gap-3">
             {#if total > 0}
                 <p class="text-zinc-400 text-sm">{numberFormatter.format(total)} total</p>
             {/if}
 
-            {#if places.length > 0}
+            {#if groups.length > 0}
                 <button
                     onclick={() => (expanded = !expanded)}
                     class="inline-flex items-center gap-1 text-zinc-400 hover:text-white text-sm transition-colors"
@@ -88,89 +75,56 @@
         <LoadingSpinner />
     {:else if error}
         <p class="text-red-400">{error}</p>
-    {:else if places.length === 0}
-        <p class="text-zinc-400">No games found.</p>
+    {:else if groups.length === 0}
+        <p class="text-zinc-400">No groups found.</p>
     {:else}
         <div
             class="overflow-hidden transition-[max-height] duration-300 ease-in-out"
             style={`max-height: ${expanded || !rowHeight ? 9999 : rowHeight}px`}
         >
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {#each places as place, i (place.id)}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {#each groups as group, i (group.id)}
                 <a
                     use:measureFirstRow={i === 0}
-                    href={`https://luduvo.com/games/${place.id}`}
+                    href={`https://luduvo.com/groups/${group.id}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-700 transition-colors group"
+                    class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-start gap-3 hover:border-zinc-700 transition-colors group"
                 >
-                    <div class="relative w-full aspect-video bg-zinc-800">
-                        {#if place.thumbnail_url}
+                    <div
+                        class="w-12 h-12 rounded-lg bg-zinc-800 flex-shrink-0 overflow-hidden flex items-center justify-center"
+                    >
+                        {#if group.icon_url}
                             <img
-                                src={place.thumbnail_url}
-                                alt={place.title}
+                                src={group.icon_url}
+                                alt={group.name}
                                 class="w-full h-full object-cover"
                                 loading="lazy"
                             />
                         {:else}
-                            <div class="w-full h-full flex items-center justify-center">
-                                <Icon icon="lucide:image-off" width={32} class="text-zinc-600" />
-                            </div>
-                        {/if}
-
-                        {#if place.active_players > 0}
-                            <div
-                                class="absolute top-2 right-2 flex items-center gap-1 bg-black/70 rounded-full px-2 py-0.5"
-                            >
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                <span class="text-white text-xs font-medium">
-                                    {numberFormatter.format(place.active_players)}
-                                </span>
-                            </div>
+                            <Icon icon="lucide:users" width={20} class="text-zinc-600" />
                         {/if}
                     </div>
 
-                    <div class="p-3">
-                        <p class="text-white font-medium truncate group-hover:text-primary transition-colors">
-                            {place.title}
-                        </p>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1.5">
+                            <p class="text-white font-medium truncate group-hover:text-primary transition-colors">
+                                {group.name}
+                            </p>
 
-                        {#if place.description}
-                            <p class="text-zinc-400 text-sm line-clamp-2 mt-1">{place.description}</p>
-                        {/if}
-
-                        <div class="flex items-center gap-3 mt-3 text-zinc-400 text-xs">
-                            <span class="flex items-center gap-1">
-                                <Icon icon="lucide:eye" width={14} />
-                                {numberFormatter.format(place.visit_count)}
-                            </span>
-
-                            <span class="flex items-center gap-1">
-                                <Icon icon="lucide:thumbs-up" width={14} />
-                                {numberFormatter.format(place.thumbs_up)}
-                            </span>
-
-                            <span class="flex items-center gap-1">
-                                <Icon icon="lucide:thumbs-down" width={14} />
-                                {numberFormatter.format(place.thumbs_down)}
-                            </span>
-
-                            <span class="flex items-center gap-1">
-                                <Icon icon="lucide:users" width={14} />
-                                {place.max_players}
-                            </span>
+                            {#if group.is_owner}
+                                <Icon icon="lucide:crown" width={14} class="text-white flex-shrink-0" />
+                            {/if}
                         </div>
 
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-xs px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300">
-                                {accessLabel(place.access)}
-                            </span>
+                        {#if group.description}
+                            <p class="text-zinc-400 text-sm line-clamp-2 mt-0.5">{group.description}</p>
+                        {/if}
 
-                            {#if place.age_rating && place.age_rating !== "unrated"}
-                                <span class="text-xs px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300">
-                                    {place.age_rating}
-                                </span>
-                            {/if}
+                        <div class="flex items-center gap-1 mt-2 text-zinc-400 text-xs">
+                            <Icon icon="lucide:user" width={12} />
+                            {numberFormatter.format(group.member_count)}
+                            {group.member_count === 1 ? "member" : "members"}
                         </div>
                     </div>
                 </a>
