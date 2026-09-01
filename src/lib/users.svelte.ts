@@ -23,7 +23,7 @@ export function createUsersStore() {
     let query = $state("");
 
     let sortColumn = $state<SortColumn>("id");
-    let sortDirection = $state<"asc" | "desc">("asc");
+    let sortDirection = $state<"asc" | "desc">("desc");
 
     let totalPages = $derived(Math.max(1, Math.ceil(total / limit)));
 
