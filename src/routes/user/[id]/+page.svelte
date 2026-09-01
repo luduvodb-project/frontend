@@ -5,6 +5,9 @@
     import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
     import ProfileHeader from "$lib/components/user/ProfileHeader.svelte";
     import ProfileStats from "$lib/components/user/ProfileStats.svelte";
+    import ProfileGames from "$lib/components/user/ProfileGames.svelte";
+
+    import { createPlacesStore } from "$lib/places.svelte.ts";
 
     import { page } from "$app/state";
 
@@ -45,6 +48,8 @@
     let loading = $state(true);
     let error = $state<string | null>(null);
 
+    let places = $derived(id ? createPlacesStore(id) : null);
+
     async function fetchProfile() {
         loading = true;
         error = null;
@@ -65,6 +70,10 @@
     }
 
     fetchProfile();
+
+    $effect(() => {
+        places?.fetchPlaces(0);
+    });
 </script>
 
 <BasePage>
@@ -92,6 +101,21 @@
                 itemCount={profile.item_count}
                 networth={profile.networth}
             />
+
+            {#if places}
+                <ProfileGames
+                    places={places.places}
+                    loading={places.loading}
+                    error={places.error}
+                    currentPage={places.currentPage}
+                    totalPages={places.totalPages}
+                    total={places.total}
+                    onNext={places.nextPage}
+                    onPrev={places.prevPage}
+                    onFirst={places.firstPage}
+                    onLast={places.lastPage}
+                />
+            {/if}
         {/if}
     </Page>
 </BasePage>
