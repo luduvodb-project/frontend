@@ -5,7 +5,6 @@
     import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
     import ProfileHeader from "$lib/components/user/ProfileHeader.svelte";
     import ProfileStats from "$lib/components/user/ProfileStats.svelte";
-    import EquippedItems from "$lib/components/user/EquippedItems.svelte";
 
     import { page } from "$app/state";
 
@@ -93,8 +92,6 @@
                 itemCount={profile.item_count}
                 networth={profile.networth}
             />
-
-            <EquippedItems items={profile.equipped_items} />
         {/if}
     </Page>
 </BasePage>
