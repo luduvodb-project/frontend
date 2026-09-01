@@ -1,7 +1,12 @@
 <script lang="ts">
-	let { children } = $props();
+	interface Props {
+		transparent?: boolean;
+		children: import("svelte").Snippet;
+	}
+
+	let { transparent = false, children }: Props = $props();
 </script>
 
-<div class="bg-zinc-900 min-h-screen w-full flex">
+<div class={`min-h-screen w-full flex ${transparent ? "" : "bg-zinc-900"}`}>
     {@render children()}
 </div>

@@ -21,6 +21,6 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<div class="bg-zinc-900 min-h-screen w-full flex">
+<div class="min-h-screen w-full flex">
 	{@render children()}
 </div>

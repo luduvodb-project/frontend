@@ -80,11 +80,34 @@
     });
  
     $effect(() => {
+        places?.fetchTotalVisits();
+    });
+ 
+    $effect(() => {
         groups?.fetchGroups(0);
     });
 </script>
  
-<BasePage>
+<svelte:head>
+    {#if profile?.background_url}
+        <style>
+            body {
+                background-color: #000;
+            }
+        </style>
+    {/if}
+</svelte:head>
+ 
+{#if profile?.background_url}
+    <div
+        class="fixed inset-0 -z-10 bg-cover bg-center bg-fixed"
+        style={`background-image: url(${profile.background_url})`}
+    >
+        <div class="absolute inset-0 bg-black/70"></div>
+    </div>
+{/if}
+ 
+<BasePage transparent={!!profile?.background_url}>
     <Sidebar />
  
     <Page>
@@ -108,6 +131,7 @@
                 placeCount={profile.place_count}
                 itemCount={profile.item_count}
                 networth={profile.networth}
+                totalVisits={places?.totalVisits ?? 0}
             />
  
             {#if places}

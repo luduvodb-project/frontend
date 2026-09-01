@@ -29,6 +29,9 @@ export function createPlacesStore(userId: number | string) {
     let limit = $state(50);
     let total = $state(0);
 
+    let totalVisits = $state(0);
+    let totalVisitsLoading = $state(true);
+
     let totalPages = $derived(Math.max(1, Math.ceil(total / limit)));
 
     async function fetchPlaces(pageIndex: number) {
@@ -54,6 +57,42 @@ export function createPlacesStore(userId: number | string) {
             error = err instanceof Error ? err.message : "Failed to load games";
         } finally {
             loading = false;
+        }
+    }
+
+    async function fetchTotalVisits() {
+        totalVisitsLoading = true;
+
+        try {
+            const pageLimit = 100;
+            let offset = 0;
+            let sum = 0;
+            let seenTotal = Infinity;
+
+            while (offset < seenTotal) {
+                const res = await fetch(
+                    `https://api.luduvo.com/users/${userId}/places?offset=${offset}&limit=${pageLimit}`
+                );
+
+                if (!res.ok) {
+                    throw new Error(`Request failed: ${res.status}`);
+                }
+
+                const data = await res.json();
+
+                for (const place of data.places as Place[]) {
+                    sum += place.visit_count;
+                }
+
+                seenTotal = data.total;
+                offset += data.places.length || pageLimit;
+
+                if (data.places.length === 0) break;
+            }
+
+            totalVisits = sum;
+        } catch { } finally {
+            totalVisitsLoading = false;
         }
     }
 
@@ -99,7 +138,10 @@ export function createPlacesStore(userId: number | string) {
         get limit() { return limit; },
         get total() { return total; },
         get totalPages() { return totalPages; },
+        get totalVisits() { return totalVisits; },
+        get totalVisitsLoading() { return totalVisitsLoading; },
         fetchPlaces,
+        fetchTotalVisits,
         nextPage,
         prevPage,
         firstPage,
