@@ -7,7 +7,7 @@
     import ProfileStats from "$lib/components/user/ProfileStats.svelte";
     import EquippedItems from "$lib/components/user/EquippedItems.svelte";
 
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
 
     interface EquippedItem {
         item_id: number;
@@ -40,7 +40,7 @@
         is_owner: boolean;
     }
 
-    let id = $derived($page.params.id);
+    let id = $derived(page.params.id);
 
     let profile = $state<Profile | null>(null);
     let loading = $state(true);

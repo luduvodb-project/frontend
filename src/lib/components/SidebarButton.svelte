@@ -1,10 +1,10 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
 
 	let { name, icon, path } = $props();
 
-    let isActive = $derived($page.url.pathname === path);
+    let isActive = $derived(page.url.pathname === path);
 </script>
 
 <a
