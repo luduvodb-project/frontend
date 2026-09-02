@@ -1,9 +1,9 @@
 <script lang="ts">
-    let { store } = $props();
+    let { store, text } = $props();
 </script>
 
 <div class="flex items-center gap-3 mb-3">
-    <label for="limit-select" class="text-zinc-400 text-sm">Users per page:</label>
+    <label for="limit-select" class="text-zinc-400 text-sm">{text} per page:</label>
 
     <select
         id="limit-select"
